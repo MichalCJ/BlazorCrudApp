@@ -1,0 +1,48 @@
+﻿@page "/animals"
+@inject BlazorCrudApp.Data.IAnimalService AnimalService;
+
+<h3>Animals</h3>
+
+<a href="animal/0">Add Animal</a>
+<table class="table">
+    <thead>
+        <tr>
+            <td>ID</td>
+            <td>Name</td>
+            <td></td>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var animal in animals)
+            {
+                <tr>
+                    <td>@animal.ID</td>
+                    <td>@animal.Name</td>
+                    <td>
+                        <a  href="animal/@animal.ID">
+                            Edit
+                        </a>
+                    </td>
+                    <td>
+                        <button class="btn btn-outline-danger" @onclick = "@(e=> OnDelete(animal.ID))"> Delete </button>
+                    </td>
+                </tr>
+            }
+    </tbody>
+</table>
+
+@code {        
+
+    private List<BlazorCrudApp.Data.Animal> animals;
+
+    protected override void OnInitialized()
+    {
+        animals = AnimalService.GetAnimals();
+    }
+
+    private void OnDelete(Guid id)
+    {
+        AnimalService.DeleteAnimal(id);
+    }
+
+}
